@@ -28,50 +28,65 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonTakeScreenshot = new System.Windows.Forms.Button();
-            this.pictureBox = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.settingsIconMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitIconMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIconMenu.SuspendLayout();
             this.SuspendLayout();
             // 
-            // buttonTakeScreenshot
+            // notifyIcon1
             // 
-            this.buttonTakeScreenshot.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonTakeScreenshot.Location = new System.Drawing.Point(12, 12);
-            this.buttonTakeScreenshot.Name = "buttonTakeScreenshot";
-            this.buttonTakeScreenshot.Size = new System.Drawing.Size(153, 31);
-            this.buttonTakeScreenshot.TabIndex = 0;
-            this.buttonTakeScreenshot.Text = "Take Screenshot";
-            this.buttonTakeScreenshot.UseVisualStyleBackColor = true;
-            this.buttonTakeScreenshot.Click += new System.EventHandler(this.buttonTakeScreenshot_Click);
+            this.notifyIcon1.ContextMenuStrip = this.notifyIconMenu;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "Screenshot";
+            this.notifyIcon1.Visible = true;
             // 
-            // pictureBox
+            // notifyIconMenu
             // 
-            this.pictureBox.Location = new System.Drawing.Point(12, 49);
-            this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(694, 426);
-            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox.TabIndex = 1;
-            this.pictureBox.TabStop = false;
+            this.notifyIconMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.settingsIconMenu,
+            this.exitIconMenu});
+            this.notifyIconMenu.Name = "notifyIconMenu";
+            this.notifyIconMenu.Size = new System.Drawing.Size(117, 48);
+            // 
+            // settingsIconMenu
+            // 
+            this.settingsIconMenu.Name = "settingsIconMenu";
+            this.settingsIconMenu.Size = new System.Drawing.Size(116, 22);
+            this.settingsIconMenu.Text = "Settings";
+            this.settingsIconMenu.Click += new System.EventHandler(this.settingsIconMenu_Click);
+            // 
+            // exitIconMenu
+            // 
+            this.exitIconMenu.Name = "exitIconMenu";
+            this.exitIconMenu.Size = new System.Drawing.Size(116, 22);
+            this.exitIconMenu.Text = "Exit";
+            this.exitIconMenu.Click += new System.EventHandler(this.exitIconMenu_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(718, 487);
-            this.Controls.Add(this.pictureBox);
-            this.Controls.Add(this.buttonTakeScreenshot);
+            this.ClientSize = new System.Drawing.Size(221, 21);
             this.Name = "MainForm";
             this.Text = "MainForm";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            this.Load += new System.EventHandler(this.MainForm_Load);
+            this.notifyIconMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button buttonTakeScreenshot;
-        private System.Windows.Forms.PictureBox pictureBox;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ContextMenuStrip notifyIconMenu;
+        private System.Windows.Forms.ToolStripMenuItem settingsIconMenu;
+        private System.Windows.Forms.ToolStripMenuItem exitIconMenu;
+
     }
 }
 
