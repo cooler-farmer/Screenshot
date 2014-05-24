@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Shortcut;
@@ -18,22 +17,22 @@ namespace Screenshot.Forms
 
         private void InitializeHotkeyBinder()
         {
-            _hotkeyBinder.Bind(Modifiers.Control | Modifiers.Alt, Keys.Z).To(HotKeyCallBackSnippets);
-            _hotkeyBinder.Bind(Modifiers.None, Keys.PrintScreen).To(HotKeyCallBackPrintScreen);
+            _hotkeyBinder.Bind(Modifiers.Control | Modifiers.Alt, Keys.Z).To(CaptureRegion);
+            _hotkeyBinder.Bind(Modifiers.None, Keys.PrintScreen).To(CaptureFullScreen);
         }
 
         private string localSavePath = string.Empty;
-        private bool localSaveBool;
+        private bool shouldSaveScreenshot;
 
-        private void HotKeyCallBackPrintScreen()
+        private void CaptureFullScreen()
         {
-            var prntImage = ScreenshotProvider.TakeScreenshot();
+            var screenshot = ScreenshotProvider.TakeScreenshot();
             
-            if (localSaveBool)
+            if (shouldSaveScreenshot)
             {
                 try
                 {
-                    prntImage.Save(Path.Combine(string.Format("{0}\\", localSavePath), Guid.NewGuid() + ".jpg"));
+                    screenshot.Save(Path.Combine(string.Format("{0}\\", localSavePath), Guid.NewGuid() + ".jpg"));
                 }
                 catch (Exception ex)
                 {
@@ -42,7 +41,7 @@ namespace Screenshot.Forms
             }
         }
 
-        private void HotKeyCallBackSnippets() 
+        private void CaptureRegion() 
         {
             var snippet = new SnippetForm();
             snippet.ShowDialog();
@@ -78,7 +77,7 @@ namespace Screenshot.Forms
             settings.ShowDialog();
             if (settings.DialogResult == DialogResult.OK)
             {
-                localSaveBool = settings.LocalBoolean;
+                shouldSaveScreenshot = settings.LocalBoolean;
                 localSavePath = settings.LocalSavePath;
             }
         }
