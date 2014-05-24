@@ -43,18 +43,21 @@ namespace Screenshot.Forms
 
         private void CaptureRegion() 
         {
-            var snippet = new SnippetForm();
-            snippet.ShowDialog();
-
-            if (snippet.DialogResult == DialogResult.OK)
+            using (var snippetDialog = new SnippetDialog())
             {
-                try
+                snippetDialog.ShowDialog();
+
+                if (snippetDialog.DialogResult == DialogResult.OK)
                 {
-                    snippet.SnippedImage.Save(Path.Combine(string.Format("{0}\\", localSavePath), Guid.NewGuid() + ".jpg"));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
+                    try
+                    {
+                        snippetDialog.SnippedImage.Save(Path.Combine(string.Format("{0}\\", localSavePath),
+                            Guid.NewGuid() + ".jpg"));
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                    }
                 }
             }
         }
