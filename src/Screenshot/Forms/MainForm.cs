@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Shortcut;
@@ -17,31 +18,33 @@ namespace Screenshot.Forms
 
         private void InitializeHotkeyBinder()
         {
-            _hotkeyBinder.Bind(Modifiers.Control | Modifiers.Alt, Keys.Z).To(CaptureRegion);
-            _hotkeyBinder.Bind(Modifiers.None, Keys.PrintScreen).To(CaptureFullScreen);
+            try //In case another application already uses the hotkey (In my case ShareX)
+            {
+                _hotkeyBinder.Bind(Modifiers.Control | Modifiers.Alt, Keys.Z).To(CaptureRegion);
+                _hotkeyBinder.Bind(Modifiers.None, Keys.PrintScreen).To(CaptureFullScreen);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
         }
 
-        private string localSavePath = string.Empty;
-        private bool shouldSaveScreenshot;
+        private string _localSavePath = String.Empty; //ToDo: use INI files to save and load the settings
+        private bool _shouldSaveScreenshot = false;
+        private bool _customFileName = true;
+        private string _customFileNamePattern = "dd-MM-yyyy_HH-mm-ss";
 
         private void CaptureFullScreen()
         {
             var screenshot = ScreenshotProvider.TakeScreenshot();
             
-            if (shouldSaveScreenshot)
+            if (_shouldSaveScreenshot)
             {
-                try
-                {
-                    screenshot.Save(Path.Combine(string.Format("{0}\\", localSavePath), Guid.NewGuid() + ".jpg"));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                }
+                SavePicture(screenshot);
             }
         }
 
-        private void CaptureRegion() 
+        private void CaptureRegion() //Bug: This works only on monitor 1 for me!
         {
             using (var snippetDialog = new SnippetDialog())
             {
@@ -49,15 +52,25 @@ namespace Screenshot.Forms
 
                 if (snippetDialog.DialogResult == DialogResult.OK)
                 {
-                    try
-                    {
-                        snippetDialog.SnippedImage.Save(Path.Combine(string.Format("{0}\\", localSavePath),
-                            Guid.NewGuid() + ".jpg"));
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.ToString());
-                    }
+                    SavePicture(snippetDialog.SnippedImage);
+                }
+            }
+        }
+
+        private void SavePicture(Image img)
+        {
+            if (_shouldSaveScreenshot)
+            {
+                try
+                {
+                    if (_customFileName)
+                        img.Save(Path.Combine(_localSavePath, DateTime.Now.ToString(_customFileNamePattern) + ".jpg")); 
+                    else
+                        img.Save(Path.Combine(_localSavePath, Guid.NewGuid() + ".jpg"));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
                 }
             }
         }
@@ -76,13 +89,22 @@ namespace Screenshot.Forms
 
         private void settingsIconMenu_Click(object sender, EventArgs e)
         {
-            var settings = new SettingsForm();
-            settings.ShowDialog();
-            if (settings.DialogResult == DialogResult.OK)
+            var settings = new SettingsForm
             {
-                shouldSaveScreenshot = settings.LocalBoolean;
-                localSavePath = settings.LocalSavePath;
-            }
+                LocalBoolean = _shouldSaveScreenshot,
+                LocalSavePath = _localSavePath,
+                CustomFileNameBoolean = _customFileName,
+                CustomFileNamePattern = _customFileNamePattern
+            };
+
+            settings.ShowDialog();
+            if (settings.DialogResult != DialogResult.OK) return;
+
+            _shouldSaveScreenshot = settings.LocalBoolean;
+            _localSavePath = settings.LocalSavePath;
+            _customFileName = settings.CustomFileNameBoolean;
+            _customFileNamePattern = settings.CustomFileNamePattern;
+
         }
     }
 }

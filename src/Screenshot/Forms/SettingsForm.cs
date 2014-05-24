@@ -16,6 +16,11 @@ namespace Screenshot.Forms
             {
                 return localText.Text;
             }
+            set
+            {
+                localText.Text = value;
+                
+            }
         }
 
         public bool LocalBoolean
@@ -23,6 +28,37 @@ namespace Screenshot.Forms
             get
             {
                 return localCheckBox.Checked;
+            }
+            set
+            {
+                localCheckBox.Checked = value;
+                
+            }
+        }
+
+        public bool CustomFileNameBoolean
+        {
+            get
+            {
+                return CustomFilenameCheckBox.Checked;
+            }
+            set
+            {
+                CustomFilenameCheckBox.Checked = value;
+                
+            }
+        }
+
+        public string CustomFileNamePattern
+        {
+            get
+            {
+                return CustomFilenameTextBox.Text;
+            }
+            set
+            {
+                CustomFilenameTextBox.Text = value;
+                
             }
         }
 
@@ -33,9 +69,7 @@ namespace Screenshot.Forms
             var result = dialog.ShowDialog();
 
             if (result == DialogResult.OK)
-            {
                 localText.Text = dialog.SelectedPath;
-            }
         }
 
         private void okBtn_Click(object sender, EventArgs e)
