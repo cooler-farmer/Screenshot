@@ -9,7 +9,6 @@ namespace Screenshot.Forms
     public partial class MainForm : Form
     {
         private readonly HotkeyBinder _hotkeyBinder = new HotkeyBinder();
-        private readonly HotkeyBinder _hotkeyBinder2 = new HotkeyBinder();
         
         public MainForm()
         {
@@ -18,7 +17,7 @@ namespace Screenshot.Forms
             var hotKeyGetSnippet = new HotkeyCombination(Modifiers.Control | Modifiers.Alt, Keys.Z);
             var hotKeyPrintScrn = new HotkeyCombination(Modifiers.None, Keys.PrintScreen);
             _hotkeyBinder.Bind(hotKeyGetSnippet).To(HotKeyCallBackSnippets);
-            _hotkeyBinder2.Bind(hotKeyPrintScrn).To(HotKeyCallBackPrintScreen);
+            _hotkeyBinder.Bind(hotKeyPrintScrn).To(HotKeyCallBackPrintScreen);
         }
 
         private string localSavePath = string.Empty;
