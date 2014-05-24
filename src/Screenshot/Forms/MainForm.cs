@@ -13,11 +13,13 @@ namespace Screenshot.Forms
         public MainForm()
         {
             InitializeComponent();
+            InitializeHotkeyBinder();
+        }
 
-            var hotKeyGetSnippet = new HotkeyCombination(Modifiers.Control | Modifiers.Alt, Keys.Z);
-            var hotKeyPrintScrn = new HotkeyCombination(Modifiers.None, Keys.PrintScreen);
-            _hotkeyBinder.Bind(hotKeyGetSnippet).To(HotKeyCallBackSnippets);
-            _hotkeyBinder.Bind(hotKeyPrintScrn).To(HotKeyCallBackPrintScreen);
+        private void InitializeHotkeyBinder()
+        {
+            _hotkeyBinder.Bind(Modifiers.Control | Modifiers.Alt, Keys.Z).To(HotKeyCallBackSnippets);
+            _hotkeyBinder.Bind(Modifiers.None, Keys.PrintScreen).To(HotKeyCallBackPrintScreen);
         }
 
         private string localSavePath = string.Empty;
