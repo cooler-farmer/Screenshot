@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Shortcut">
-      <HintPath>..\..\..\Work\C# Dev\Libraries\Shortcut.dll</HintPath>
+      <HintPath>..\..\lib\Shortcut.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
