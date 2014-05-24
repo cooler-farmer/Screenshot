@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using Shortcut;
@@ -50,10 +49,6 @@ namespace Screenshot.Forms
 
                 if (snippetDialog.DialogResult == DialogResult.OK)
                 {
-                    var screenshot = snippetDialog.SnippedImage;
-                    screenshot.Save("C:\\Users\\ByteBlast\\Desktop\\Screenshot.jpg");
-                    Debugger.Break();
-
                     try
                     {
                         snippetDialog.SnippedImage.Save(Path.Combine(string.Format("{0}\\", localSavePath),
