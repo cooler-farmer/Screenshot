@@ -8,7 +8,6 @@ using System.Windows.Forms;
 
 namespace Screenshot.Forms
 {
-    // Snippets Class. More efficient way?? 
     public partial class SnippetForm : Form
     {
         public Pen SelectPen;
@@ -100,7 +99,7 @@ namespace Screenshot.Forms
                 SnippedImage = img;
 
                 DialogResult = DialogResult.OK;
-              //  Close();
+               // Close();
             }
         }
     }
