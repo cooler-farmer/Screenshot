@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace Screenshot.Windows
@@ -30,7 +31,7 @@ namespace Screenshot.Windows
         internal static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
 
         [DllImport("gdi32.dll")]
-        internal static extern bool BitBlt(IntPtr hdcDest, int xDest, int yDest, int wDest, int hDest, IntPtr hdcSource, int xSrc, int ySrc, TernaryRasterOperations rop);
+        internal static extern bool BitBlt(IntPtr hdcDest, int xDest, int yDest, int wDest, int hDest, IntPtr hdcSource, int xSrc, int ySrc, CopyPixelOperation rop);
 
         [DllImport("gdi32.dll")]
         internal static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);

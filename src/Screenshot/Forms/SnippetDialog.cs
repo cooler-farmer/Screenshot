@@ -6,13 +6,14 @@ namespace Screenshot.Forms
 {
     public sealed partial class SnippetDialog : Form
     {
-        private readonly Pen borderPen = new Pen(Color.Black, 1);
-        private int selectHeight;
-        private int selectWidth;
-        private int selectX;
-        private int selectY;
-        private bool drawing;
-        private Rectangle selectedArea;
+        private readonly Pen _borderPen = new Pen(Color.Black, 1);
+        private int _selectHeight, _selectHeighDraw;
+        private int _selectWidth, _selectWidthDraw;
+        private int _selectX, _selectXDraw;
+        private int _selectY, _selectYDraw;
+
+        private bool _drawing;
+        private Rectangle _selectedArea, _selectedAreaDraw;
 
         public SnippetDialog()
         {
@@ -20,16 +21,17 @@ namespace Screenshot.Forms
             DoubleBuffered = true;
         }
 
-        public Image SnippedImage { get; set; }
+        public Bitmap SnippedImage { get; set; }
 
         private void SnippetForm_Load(object sender, EventArgs e)
         {
-            Location = Point.Empty;
-            Size = Screen.PrimaryScreen.WorkingArea.Size;
+            Location = new Point(SystemInformation.VirtualScreen.Left, 0);
+            Size = new Size(SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height);
+            
             TopMost = true;
             Cursor = Cursors.Cross;
 
-            var screenshot = ScreenshotProvider.TakeScreenshot();
+            var screenshot = ScreenshotProvider.TakeScreenshotAllScreens();
             BackgroundImage = screenshot;
         }
 
@@ -37,34 +39,43 @@ namespace Screenshot.Forms
         {
             if (e.Button != MouseButtons.Left) return;
             
-            selectX = e.X;
-            selectY = e.Y;
-            drawing = true;
+            _selectX = System.Windows.Forms.Cursor.Position.X;
+            _selectY = System.Windows.Forms.Cursor.Position.Y;
+
+            _selectXDraw = e.X;
+            _selectYDraw = e.Y;
+            _drawing = true;
         }
 
         private void SnippetDialog_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!drawing) return;
+            if (!_drawing) return;
 
-            selectWidth = e.X - selectX;
-            selectHeight = e.Y - selectY;
-            selectedArea = new Rectangle(selectX , selectY, selectWidth, selectHeight);
+            _selectWidth = System.Windows.Forms.Cursor.Position.X - _selectX;
+            _selectHeight = System.Windows.Forms.Cursor.Position.Y - _selectY;
+
+            _selectWidthDraw = e.X - _selectXDraw;
+            _selectHeighDraw = e.Y - _selectYDraw;
+
+            _selectedArea = new Rectangle(_selectX , _selectY, _selectWidth, _selectHeight);
+            _selectedAreaDraw = new Rectangle(_selectXDraw, _selectYDraw, _selectWidthDraw, _selectHeighDraw);
             Invalidate();
         }
 
         private void SnippetDialog_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawRectangle(borderPen, selectedArea);
+            e.Graphics.DrawRectangle(_borderPen, _selectedAreaDraw);
         }
 
         private void SnippetDialog_MouseUp(object sender, MouseEventArgs e)
         {
-            drawing = false;
+            _drawing = false;
+            Hide();
 
-            // ensures border is not captured
-            selectedArea.Inflate(-1, -1);
+            //ensures border is not captured
+            _selectedArea.Inflate(-1, -1);
 
-            SnippedImage = ScreenshotProvider.TakeScreenshot(selectedArea);
+            SnippedImage = ScreenshotProvider.TakeScreenshot(_selectedArea);
             DialogResult = DialogResult.OK;
         }
 

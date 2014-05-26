@@ -7,9 +7,16 @@ namespace Screenshot
 {
     internal static class ScreenshotProvider
     {
-        public static Bitmap TakeScreenshot()
+        public static Bitmap TakeScreenshotOneScreen(Screen sc)
         {
-            return TakeScreenshot(Screen.PrimaryScreen.Bounds);
+            return TakeScreenshot(sc.Bounds);
+        }
+
+        public static Bitmap TakeScreenshotAllScreens()
+        {
+            return
+                TakeScreenshot(new Rectangle(SystemInformation.VirtualScreen.Left, SystemInformation.VirtualScreen.Top,
+                    SystemInformation.VirtualScreen.Width, SystemInformation.VirtualScreen.Height));
         }
 
         public static Bitmap TakeScreenshot(Rectangle area)
@@ -24,7 +31,7 @@ namespace Screenshot
             IntPtr handleOldBitmap = NativeMethods.SelectObject(handleDestination, handleBitmap);
 
             NativeMethods.BitBlt(handleDestination, 0, 0, area.Width, area.Height, handleSource, area.X, area.Y,
-                                 TernaryRasterOperations.SRCCOPY | TernaryRasterOperations.CAPTUREBLT);
+                                 CopyPixelOperation.SourceCopy | CopyPixelOperation.CaptureBlt);
 
             Bitmap desktopCapture = Image.FromHbitmap(handleBitmap);
             NativeMethods.SelectObject(handleDestination, handleOldBitmap);
